@@ -1,0 +1,37 @@
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+
+@Injectable()
+export class UsersService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  findByEmail(email: string) {
+    return this.prisma.user.findUnique({ where: { email } });
+  }
+
+  findByGoogleId(googleId: string) {
+    return this.prisma.user.findUnique({ where: { googleId } });
+  }
+
+  create(data: {
+    email: string;
+    firstName?: string;
+    lastName?: string;
+    picture?: string;
+    googleId?: string;
+    password?: string;
+  }) {
+    return this.prisma.user.create({ data });
+  }
+
+  update(id: string, data: Partial<{
+    email: string;
+    firstName: string;
+    lastName: string;
+    picture: string;
+    googleId: string;
+    password: string;
+  }>) {
+    return this.prisma.user.update({ where: { id }, data });
+  }
+}
